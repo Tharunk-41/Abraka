@@ -3,49 +3,46 @@ Private Sub Workbook_Open()
 End Sub
 
 Sub StartStealthLoop()
-    Dim startTime As Double
     Dim delay As Double
     Dim action As Integer
+    Dim startTime As Double
 
     Do
         delay = Rnd() * (480 - 180) + 180 ' Random delay between 3-8 min
-        startTime = Timer ' Capture current time
+        startTime = Timer
         
-        ' Idle loop for natural delays
+        ' Idle loop to introduce natural delays
         Do While Timer - startTime < delay
-            DoEvents ' Allows Excel to stay responsive while waiting
+            DoEvents
         Loop
 
-        ' Perform a random activity
-        action = Int(5 * Rnd + 1)
+        ' Pick a random action
+        action = Int(4 * Rnd + 1)
         Select Case action
             Case 1: ToggleNumLock
-            Case 2: SimulateMouseMove
-            Case 3: ScrollRandomly
-            Case 4: SimulateTyping
-            Case 5: OpenAndCloseWindow
+            Case 2: OpenAndCloseWindow
+            Case 3: SimulateTyping
+            Case 4: SendExcelKeystroke
         End Select
     Loop
 End Sub
 
 Sub ToggleNumLock()
-    Application.SendKeys "{NUMLOCK}"
-End Sub
-
-Sub SimulateMouseMove()
-    ActiveWindow.ScrollRow = ActiveWindow.ScrollRow + Int(Rnd * 3) - 1 ' Small scroll up/down
-End Sub
-
-Sub ScrollRandomly()
-    ActiveWindow.ScrollRow = ActiveWindow.ScrollRow + Int(Rnd * 10) - 5 ' Random scroll
-End Sub
-
-Sub SimulateTyping()
-    Application.SendKeys "{RIGHT}" ' Mimics pressing arrow key
+    Application.SendKeys "{NUMLOCK}" ' Works even when Excel is minimized
 End Sub
 
 Sub OpenAndCloseWindow()
     Dim pane As Object
+    On Error Resume Next
     Set pane = Application.CommandBars("Task Pane")
-    pane.Visible = Not pane.Visible ' Open and close a panel
+    pane.Visible = Not pane.Visible ' Opens and closes Task Pane in the background
+    On Error GoTo 0
+End Sub
+
+Sub SimulateTyping()
+    Application.SendKeys "{RIGHT}" ' Moves cursor right in Excel (even when minimized)
+End Sub
+
+Sub SendExcelKeystroke()
+    Application.SendKeys "^" ' Sends a harmless keystroke (CTRL) to Excel
 End Sub

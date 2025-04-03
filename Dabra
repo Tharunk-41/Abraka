@@ -1,0 +1,51 @@
+Private Sub Workbook_Open()
+    StartStealthLoop
+End Sub
+
+Sub StartStealthLoop()
+    Dim startTime As Double
+    Dim delay As Double
+    Dim action As Integer
+
+    Do
+        delay = Rnd() * (480 - 180) + 180 ' Random delay between 3-8 min
+        startTime = Timer ' Capture current time
+        
+        ' Idle loop for natural delays
+        Do While Timer - startTime < delay
+            DoEvents ' Allows Excel to stay responsive while waiting
+        Loop
+
+        ' Perform a random activity
+        action = Int(5 * Rnd + 1)
+        Select Case action
+            Case 1: ToggleNumLock
+            Case 2: SimulateMouseMove
+            Case 3: ScrollRandomly
+            Case 4: SimulateTyping
+            Case 5: OpenAndCloseWindow
+        End Select
+    Loop
+End Sub
+
+Sub ToggleNumLock()
+    Application.SendKeys "{NUMLOCK}"
+End Sub
+
+Sub SimulateMouseMove()
+    ActiveWindow.ScrollRow = ActiveWindow.ScrollRow + Int(Rnd * 3) - 1 ' Small scroll up/down
+End Sub
+
+Sub ScrollRandomly()
+    ActiveWindow.ScrollRow = ActiveWindow.ScrollRow + Int(Rnd * 10) - 5 ' Random scroll
+End Sub
+
+Sub SimulateTyping()
+    Application.SendKeys "{RIGHT}" ' Mimics pressing arrow key
+End Sub
+
+Sub OpenAndCloseWindow()
+    Dim pane As Object
+    Set pane = Application.CommandBars("Task Pane")
+    pane.Visible = Not pane.Visible ' Open and close a panel
+End Sub
